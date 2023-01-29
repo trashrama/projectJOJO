@@ -7,7 +7,6 @@ from selenium.webdriver.common.by import By
 
 # lista global com todos os stands
 STANDS_DB = []
-JOJO_PARTS = [i for i in range(3, 9)]
 
 
 def verify_repeated(stand_name, part):
@@ -17,7 +16,6 @@ def verify_repeated(stand_name, part):
                 return True
             else:
                 return False
-
 
 def get_info(navegador, STANDS_DB, part):
 
@@ -67,13 +65,14 @@ def get_info(navegador, STANDS_DB, part):
             except:
                 potential = "NULL"
 
-            stand_info = [stand_name, part, stand_master, destpower, speed, range_stand,
-                          stamina, precision, potential]
-            print(stand_info)
-            STANDS_DB.append(stand_info)
+            stand_info = [stand_name, part, stand_master, destpower[0], speed[0], range_stand[0],
+                          stamina[0], precision[0], potential[0]]
+            if stand_info not in STANDS_DB:
+                STANDS_DB.append(stand_info)
+            else:
+                pass
     except:
         pass
-
 
 def write_file(file_name):
     with open(file_name, 'w') as file:
@@ -83,33 +82,46 @@ def write_file(file_name):
     write_file("stands.txt")
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
+navegador.maximize_window()
 
 print("TABELA DE DEBUG\n[1.0] Entrar na Página")
 navegador.get("https://jojowiki.com/List_of_Stands")
-print("REALIZADO")
 
 
 #descobrir quantos elementos tem na pagina
-bloco = navegador.find_element(By.CLASS_NAME, 'diamond2')
-num_art = bloco.find_elements(By.CLASS_NAME, 'charwhitelink')
-print(len(num_art))
 
-for art in range(len(num_art)+1):
-    print("[2] Entrou no FOR")
+# procurar o menu
+menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
+# pegar somente os links dentro do menu
+el = menu.find_elements(By.TAG_NAME, 'li')
 
-    #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
+bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
+num_art = bloco[0].find_elements(By.CLASS_NAME, 'charwhitelink')
+
+for i in range(1, len(el)):
+   
+    for art in range(len(num_art)):
+        #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
+        bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
+        num_art = bloco[i-1].find_elements(By.CLASS_NAME, 'charwhitelink')
+        
+        element = WebDriverWait(navegador, 10).until(EC.element_to_be_clickable(num_art[0]))
+        element.click()
+
+        get_info(navegador, STANDS_DB, i+2)
+        navegador.back()
+        print(STANDS_DB)
 
     bloco = navegador.find_element(By.CLASS_NAME, 'diamond2')
     num_art = bloco.find_elements(By.CLASS_NAME, 'charwhitelink')
 
 
+    # atualizar o menu e os itens por conta do DOM
+    menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
+    
+    el = menu.find_elements(By.TAG_NAME, 'li')
 
-    nome_pagina = navegador.find_element(
-        By.CLASS_NAME, "tabberactive")
-
-    element = WebDriverWait(navegador, 10).until(EC.element_to_be_clickable(num_art[art]))
-    element.click()
-
-
-    get_info(navegador, STANDS_DB, 3)
-    navegador.back()
+    aba_atual = navegador.find_element(By.XPATH, '(//li)[{}]'.format(i+1))
+    aba_atual.click()
+ 
+    WebDriverWait(navegador, 3)
