@@ -80,7 +80,7 @@ def write_file(file_name):
         for stand in STANDS_DB:
             file.write("({}, {}, {}, {}, {}, {}, {}, {}, {})\n".format(stand[0], stand[1], stand[2],
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
-
+    write_file("stands.txt")
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
 
@@ -88,22 +88,28 @@ print("TABELA DE DEBUG\n[1.0] Entrar na Página")
 navegador.get("https://jojowiki.com/List_of_Stands")
 print("REALIZADO")
 
-for i in range(1, 100):
-    lista_paginas = WebDriverWait(navegador, 5).until(EC.element_to_be_clickable(
-        (By.XPATH, "(//div[@class='charname'])[{}]".format(i))))
+
+#descobrir quantos elementos tem na pagina
+bloco = navegador.find_element(By.CLASS_NAME, 'diamond2')
+num_art = bloco.find_elements(By.CLASS_NAME, 'charwhitelink')
+print(len(num_art))
+
+for art in range(len(num_art)+1):
+    print("[2] Entrou no FOR")
+
+    #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
+
+    bloco = navegador.find_element(By.CLASS_NAME, 'diamond2')
+    num_art = bloco.find_elements(By.CLASS_NAME, 'charwhitelink')
+
+
 
     nome_pagina = navegador.find_element(
         By.CLASS_NAME, "tabberactive")
 
-    print(nome_pagina.text)
+    element = WebDriverWait(navegador, 10).until(EC.element_to_be_clickable(num_art[art]))
+    element.click()
 
-    lista_paginas.click()
 
-    if (i > 0 and i <= 36):
-        jojo_part = JOJO_PARTS[0]
-    # elif (i > 36 and i)
-
-    get_info(navegador, STANDS_DB, jojo_part)
+    get_info(navegador, STANDS_DB, 3)
     navegador.back()
-
-write_file("stands.txt")
