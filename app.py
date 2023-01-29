@@ -1,4 +1,9 @@
 from selenium import webdriver
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+
+import time
 
 # pip3 install selenium
 
@@ -30,12 +35,19 @@ def get_info(navegador, STANDS_DB):
 
 
 JOJO_PARTS = [i for i in range(3, 9)]
-print(JOJO_PARTS)
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
 
-navegador.get("https://jjba.fandom.com/pt-br/wiki/Star_Platinum")
+navegador.get("https://jjba.fandom.com/pt-br/wiki/Categoria:Lista_de_Stands")
 
-get_info(navegador, STANDS_DB)
 
-print(STANDS_DB)
+
+WebDriverWait(navegador, 10).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[7]/div/div/div[2]/div[2]"))).click()
+
+
+time.sleep(10)
+
+
+
+#get_info(navegador, STANDS_DB)
+
