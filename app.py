@@ -26,37 +26,47 @@ def get_info(navegador, STANDS_DB, PARTE):
 
     # adiciona o nome do stand na lista
     name_stand = navegador.find_element(
-        'xpath', '//*[@id="mw-content-text"]/div[2]/aside/h2').text
+        'xpath', "//h2[@class='pi-item pi-item-spacing pi-title']").text
     # adiciona o nome do usuario
-    stand_master = navegador.find_element(
-        'xpath', '//*[@id="mw-content-text"]/div[2]/aside/div[3]/div/a').text
+    div_stand_master = navegador.find_elements(
+        'xpath', '//div[@data-source="user"]')[0].text
+    div_stand_master = div_stand_master.split("\n")
+    stand_master = div_stand_master[1]
 
-    lista_hab = []
-    # adiciona as habilidades
-    for i in range(1, 3):
-        for j in range(1, 4):
-            hab = navegador.find_element(
-                'xpath', '//*[@id="tabber-6ecfd84b5e9d4da5669c4a38e694027b"]/div[1]/aside/section[{}]/table/tbody/tr/td[{}]'.format(i, j)).get_attribute("innerHTML")
-            lista_hab.append(hab)
+    print(navegador.find_element(
+        'xpath', "//td[@data-source='destpower']").get_attribute("innerHTML"))
+
+    lista_hab = [navegador.find_element(
+        'xpath', "//td[@data-source='destpower']").get_attribute("innerHTML"), navegador.find_element(
+        'xpath', "//td[@data-source='speed']").get_attribute("innerHTML"), navegador.find_element(
+        'xpath', "//td[@data-source='range']").get_attribute("innerHTML"),
+        navegador.find_element(
+        'xpath', "//td[@data-source='stamina']").get_attribute("innerHTML"), navegador.find_element(
+        'xpath', "//td[@data-source='precision']").get_attribute("innerHTML"), navegador.find_element(
+        'xpath', "//td[@data-source='potential']").get_attribute("innerHTML")]
 
     stand_info.append(name_stand)
     stand_info.append(PARTE)
     stand_info.append(stand_master)
     stand_info.extend(lista_hab)
+    STANDS_DB.append(stand_info)
 
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
 
-navegador.get("https://jojowiki.com/Star_Platinum")
+navegador.get("https://jojowiki.com/List_of_Stands")
 
-get_info(navegador, STANDS_DB, JOJO_PARTS[0])
-# print(STANDS_DB)
 
-# indice_artigos = 1
-# while True:
-#     WebDriverWait(navegador, 10)
-#     pagina = navegador.find_element(
-#         'xpath', '//*[@id="mw-content-text"]/div[1]/table[1]/tbody/tr[3]/th[{}]/i/a'.format(indice_artigos))
-#     pagina.click()
-#     navegador.back()
-#     indice_artigos = indice_artigos + 1
+indice_artigos = 1
+while True:
+
+    pagina = WebDriverWait(navegador, 5).until(
+        EC.presence_of_element_located(
+            (By.XPATH, '//*[@id="tabber-7b41f183054568e35f06bd9e4c65aa1d"]/div[1]/div[1]/div/div[2]/div[{}]/div[2]/a'.format(indice_artigos))))
+
+    pagina.click()
+    get_info(navegador, STANDS_DB, JOJO_PARTS[0])
+    print(STANDS_DB)
+    navegador.back()
+
+    indice_artigos = indice_artigos + 1
