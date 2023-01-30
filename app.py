@@ -41,60 +41,57 @@ def get_info(navegador, STANDS_DB, part):
         # verificar se tem stands repetidos como o Star Platinum na parte 3, 4 e 6
         isRepeated = verify_repeated(stand_name, part)
 
-        if not (isRepeated):
-            # adiciona o nome do usuario
-            div_stand_master = navegador.find_elements(
-                'xpath', '//div[@data-source="user"]')[0].text
-            div_stand_master = div_stand_master.split("\n")
-            stand_master = div_stand_master[1]
+       
+        # adiciona o nome do usuario
+        div_stand_master = navegador.find_elements(
+            'xpath', '//div[@data-source="user"]')[0].text
+        div_stand_master = div_stand_master.split("\n")
+        stand_master = div_stand_master[1]
 
-            try:
-                destpower = navegador.find_element(
-                    'xpath', "//td[@data-source='destpower']").get_attribute("innerHTML")
-            except:
-                destpower = "UNKNOWN"
-            try:
-                speed = navegador.find_element(
-                    'xpath', "//td[@data-source='speed']").get_attribute("innerHTML")
-            except:
-                speed = "UNKNOWN"
-            try:
-                range_stand = navegador.find_element(
-                    'xpath', "//td[@data-source='range']").get_attribute("innerHTML")
-            except:
-                range_stand = "UNKNOWN"
-            try:
-                stamina = navegador.find_element(
-                    'xpath', "//td[@data-source='stamina']").get_attribute("innerHTML")
-            except:
-                stamina = "UNKNOWN"
-            try:
-                precision = navegador.find_element(
-                    'xpath', "//td[@data-source='precision']").get_attribute("innerHTML")
-            except:
-                precision = "UNKNOWN"
-            try:
-                potential = navegador.find_element(
-                    'xpath', "//td[@data-source='potential']").get_attribute("innerHTML")
-            except:
-                potential = "UNKNOWN"
-            
-            destpower = treatment_char(destpower)
-            speed = treatment_char(speed)
-            range_stand = treatment_char(range_stand)
-            potential = treatment_char(potential)
-            precision = treatment_char(precision)
-            destpower = treatment_char(destpower)
-
-            
-            
-            
-            stand_info = [stand_name, part, stand_master, destpower, speed, range_stand,
-                          stamina, precision, potential]
-            if stand_info not in STANDS_DB:
-                STANDS_DB.append(stand_info)
-            else:
-                pass
+        try:
+            destpower = navegador.find_element(
+                'xpath', "//td[@data-source='destpower']").get_attribute("innerHTML")
+        except:
+            destpower = "UNKNOWN"
+        try:
+            speed = navegador.find_element(
+                'xpath', "//td[@data-source='speed']").get_attribute("innerHTML")
+        except:
+            speed = "UNKNOWN"
+        try:
+            range_stand = navegador.find_element(
+                'xpath', "//td[@data-source='range']").get_attribute("innerHTML")
+        except:
+            range_stand = "UNKNOWN"
+        try:
+            stamina = navegador.find_element(
+                'xpath', "//td[@data-source='stamina']").get_attribute("innerHTML")
+        except:
+            stamina = "UNKNOWN"
+        try:
+            precision = navegador.find_element(
+                'xpath', "//td[@data-source='precision']").get_attribute("innerHTML")
+        except:
+            precision = "UNKNOWN"
+        try:
+            potential = navegador.find_element(
+                'xpath', "//td[@data-source='potential']").get_attribute("innerHTML")
+        except:
+            potential = "UNKNOWN"
+        
+        destpower = treatment_char(destpower)
+        speed = treatment_char(speed)
+        range_stand = treatment_char(range_stand)
+        potential = treatment_char(potential)
+        precision = treatment_char(precision)
+        destpower = treatment_char(destpower)
+        
+        stand_info = [stand_name, part, stand_master, destpower, speed, range_stand,
+                        stamina, precision, potential]
+        if stand_info not in STANDS_DB:
+            STANDS_DB.append(stand_info)
+        else:
+            pass
     except:
         pass
 def write_file(file_name):
@@ -126,21 +123,24 @@ t = 0
 num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
 for i in range(1, len(el)):
-   
+    part = i + 2
+    nav_voltou = False
     for art in range(len(num_art)):
         #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
         wait()
 
-        bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
+        if nav_voltou == True:
+            bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
+            num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
-        num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
-        print(num_art[art].text)
-        
-        element = WebDriverWait(navegador, 5).until(EC.element_to_be_clickable(num_art[art]))
-        element.click()
-
-        get_info(navegador, STANDS_DB, i+2)
-        navegador.back()
+        #verifica assim que achar o nome do artigo se é repetido
+        isRepeated = verify_repeated(num_art[art].text, part)
+        if not isRepeated:
+            element = WebDriverWait(navegador, 5).until(EC.element_to_be_clickable(num_art[art]))
+            element.click()
+            get_info(navegador, STANDS_DB, part)
+            navegador.back()
+            nav_voltou = True
         print(STANDS_DB)
 
     # atualizar o menu e os itens por conta do DOM
