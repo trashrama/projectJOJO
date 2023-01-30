@@ -100,7 +100,7 @@ def get_info(navegador, STANDS_DB, part):
 def write_file(file_name):
     with open(file_name, 'w') as file:
         for stand in STANDS_DB:
-            file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {}\n)".format(stand[0], stand[1], stand[2],
+            file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {})\n".format(stand[0], stand[1], stand[2],
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
 def wait():
     sleep(5)
@@ -134,6 +134,7 @@ for i in range(1, len(el)):
         bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
 
         num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
+        print(num_art[art].text)
         
         element = WebDriverWait(navegador, 5).until(EC.element_to_be_clickable(num_art[art]))
         element.click()
@@ -145,15 +146,10 @@ for i in range(1, len(el)):
     # atualizar o menu e os itens por conta do DOM
     menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
     
-    #el = menu.find_elements(By.TAG_NAME, 'li')
-
     aba_atual = navegador.find_element(By.XPATH, '(//li)[{}]'.format(i+1))
     aba_atual.click()
 
     t = t + 1
 
-    wait()
- #   bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
-   # num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
-
+#    wait()
     WebDriverWait(navegador, 3)
