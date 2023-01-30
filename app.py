@@ -94,7 +94,7 @@ menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
 # pegar somente os elementos dentro do menu
 el = menu.find_elements(By.TAG_NAME, 'li')
 
-sleep(10)
+sleep(5)
 
 bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
 t = 0
@@ -104,7 +104,7 @@ for i in range(1, len(el)):
    
     for art in range(len(num_art)):
         #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
-        sleep(10)
+        sleep(5)
         bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
 
         num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
@@ -126,10 +126,9 @@ for i in range(1, len(el)):
 
     t = t + 1
 
-    sleep(10)
-    bloco = navegador.find_element(By.CLASS_NAME, 'diamond2')
+    sleep(5)
+    bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
     num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
  
     WebDriverWait(navegador, 3)
-    write_file("stands.txt")
