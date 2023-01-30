@@ -16,13 +16,15 @@ def verify_repeated(stand_name, part):
                 return True
             else:
                 return False
+def treatment_char(stat):
 
-def check_is_infinite(stat):
+    grab_initial_letter(stat)
+
     if stat == '∞':
         return 'I'
-    elif "N" in stat:
+    elif stat == 'N':
         return 'NULL'
-    elif '<' or '?' in stat:
+    elif stat =='<' or stat == '?':
         return 'UNKNOWN'
     else:
         return stat
@@ -76,21 +78,13 @@ def get_info(navegador, STANDS_DB, part):
                     'xpath', "//td[@data-source='potential']").get_attribute("innerHTML")
             except:
                 potential = "NULL"
-
-            destpower = grab_initial_letter(destpower)
-            speed = grab_initial_letter(speed)
-            range_stand = grab_initial_letter(range_stand)
-            potential = grab_initial_letter(potential)
-            precision = grab_initial_letter(precision)
-            destpower = grab_initial_letter(destpower)
-
             
-            destpower = check_is_infinite(destpower)
-            speed = check_is_infinite(speed)
-            range_stand = check_is_infinite(range_stand)
-            potential = check_is_infinite(potential)
-            precision = check_is_infinite(precision)
-            destpower = check_is_infinite(destpower)
+            destpower = treatment_char(destpower)
+            speed = treatment_char(speed)
+            range_stand = treatment_char(range_stand)
+            potential = treatment_char(potential)
+            precision = treatment_char(precision)
+            destpower = treatment_char(destpower)
 
             
             
@@ -103,12 +97,15 @@ def get_info(navegador, STANDS_DB, part):
                 pass
     except:
         pass
-
 def write_file(file_name):
     with open(file_name, 'w') as file:
         for stand in STANDS_DB:
-            file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {})".format(stand[0], stand[1], stand[2],
+            file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {}\n)".format(stand[0], stand[1], stand[2],
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
+
+def wait():
+    sleep(2.5)
+
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
 navegador.maximize_window()
@@ -123,7 +120,7 @@ menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
 # pegar somente os elementos dentro do menu
 el = menu.find_elements(By.TAG_NAME, 'li')
 
-sleep(5)
+wait()
 
 bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
 t = 0
@@ -133,7 +130,8 @@ for i in range(1, len(el)):
    
     for art in range(len(num_art)):
         #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
-        sleep(5)
+        wait()
+
         bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
 
         num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
@@ -155,7 +153,7 @@ for i in range(1, len(el)):
 
     t = t + 1
 
-    sleep(5)
+    wait()
     bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
     num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
