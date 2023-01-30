@@ -12,11 +12,23 @@ STANDS_DB = []
 def verify_repeated(stand_name, part):
     if len(STANDS_DB) > 0:
         for stand in STANDS_DB:
-            if stand[0] == stand_name and stand[1] == part:
+            if stand[0] == stand_name and stand[1] != part and part < 7:
                 return True
             else:
                 return False
 
+def check_is_infinite(stat):
+    if stat == '∞':
+        return 'I'
+    elif "N" in stat:
+        return 'NULL'
+    elif '<' or '?' in stat:
+        return 'UNKNOWN'
+    else:
+        return stat
+#alguns status bugam e pegam alguns códigos HTML além deles próprios, então é necessária uma função para corrigir isso.
+def grab_initial_letter(stat):
+    return stat[0]
 def get_info(navegador, STANDS_DB, part):
 
     try:
@@ -65,8 +77,26 @@ def get_info(navegador, STANDS_DB, part):
             except:
                 potential = "NULL"
 
-            stand_info = [stand_name, part, stand_master, destpower[0], speed[0], range_stand[0],
-                          stamina[0], precision[0], potential[0]]
+            destpower = grab_initial_letter(destpower)
+            speed = grab_initial_letter(speed)
+            range_stand = grab_initial_letter(range_stand)
+            potential = grab_initial_letter(potential)
+            precision = grab_initial_letter(precision)
+            destpower = grab_initial_letter(destpower)
+
+            
+            destpower = check_is_infinite(destpower)
+            speed = check_is_infinite(speed)
+            range_stand = check_is_infinite(range_stand)
+            potential = check_is_infinite(potential)
+            precision = check_is_infinite(precision)
+            destpower = check_is_infinite(destpower)
+
+            
+            
+            
+            stand_info = [stand_name, part, stand_master, destpower, speed, range_stand,
+                          stamina, precision, potential]
             if stand_info not in STANDS_DB:
                 STANDS_DB.append(stand_info)
             else:
@@ -79,7 +109,6 @@ def write_file(file_name):
         for stand in STANDS_DB:
             file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {})".format(stand[0], stand[1], stand[2],
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
-    write_file("stands.txt")
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
 navegador.maximize_window()
@@ -130,5 +159,5 @@ for i in range(1, len(el)):
     bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
     num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
- 
+    # write_file("stands.txt")
     WebDriverWait(navegador, 3)
