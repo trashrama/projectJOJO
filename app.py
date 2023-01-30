@@ -27,7 +27,7 @@ def treatment_char(stat):
     elif stat =='<' or stat == '?':
         return 'UNKNOWN'
     else:
-        return stat
+        return stat.upper()
 #alguns status bugam e pegam alguns códigos HTML além deles próprios, então é necessária uma função para corrigir isso.
 def grab_initial_letter(stat):
     return stat[0]
@@ -52,32 +52,32 @@ def get_info(navegador, STANDS_DB, part):
                 destpower = navegador.find_element(
                     'xpath', "//td[@data-source='destpower']").get_attribute("innerHTML")
             except:
-                destpower = "NULL"
+                destpower = "UNKNOWN"
             try:
                 speed = navegador.find_element(
                     'xpath', "//td[@data-source='speed']").get_attribute("innerHTML")
             except:
-                speed = "NULL"
+                speed = "UNKNOWN"
             try:
                 range_stand = navegador.find_element(
                     'xpath', "//td[@data-source='range']").get_attribute("innerHTML")
             except:
-                range_stand = "NULL"
+                range_stand = "UNKNOWN"
             try:
                 stamina = navegador.find_element(
                     'xpath', "//td[@data-source='stamina']").get_attribute("innerHTML")
             except:
-                stamina = "NULL"
+                stamina = "UNKNOWN"
             try:
                 precision = navegador.find_element(
                     'xpath', "//td[@data-source='precision']").get_attribute("innerHTML")
             except:
-                precision = "NULL"
+                precision = "UNKNOWN"
             try:
                 potential = navegador.find_element(
                     'xpath', "//td[@data-source='potential']").get_attribute("innerHTML")
             except:
-                potential = "NULL"
+                potential = "UNKNOWN"
             
             destpower = treatment_char(destpower)
             speed = treatment_char(speed)
@@ -102,9 +102,8 @@ def write_file(file_name):
         for stand in STANDS_DB:
             file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {}\n)".format(stand[0], stand[1], stand[2],
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
-
 def wait():
-    sleep(2.5)
+    sleep(5)
 
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
@@ -146,7 +145,7 @@ for i in range(1, len(el)):
     # atualizar o menu e os itens por conta do DOM
     menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
     
-    el = menu.find_elements(By.TAG_NAME, 'li')
+    #el = menu.find_elements(By.TAG_NAME, 'li')
 
     aba_atual = navegador.find_element(By.XPATH, '(//li)[{}]'.format(i+1))
     aba_atual.click()
@@ -154,8 +153,8 @@ for i in range(1, len(el)):
     t = t + 1
 
     wait()
-    bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
-    num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
+ #   bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
+   # num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
-    # write_file("stands.txt")
+    write_file("stands.txt")
     WebDriverWait(navegador, 3)

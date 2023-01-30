@@ -1,1 +1,36 @@
-(Star Platinum, 3, Jotaro Kujo, A, A, C, A, A, A)(Magician's Red, 3, Muhammad Avdol, B, B, C, B, C, D)(Hermit Purple, 3, Joseph Joestar, D, C, D, A, D, E)(Hierophant Green, 3, Noriaki Kakyoin, C, B, A, B, C, D)(Silver Chariot, 3, Jean Pierre Polnareff, C, A, C, B, B, C)(The Fool, 3, Iggy, B, C, D, C, D, C)(The World, 3, DIO, A, A, C, A, B, B)(Tower of Gray, 3, Gray Fly, E, A, A, C, E, E)(Dark Blue Moon, 3, Impostor Captain Tennille, C, C, C, B, C, D)(Strength, 3, Forever, B, D, D, A, E, E)(Ebony Devil, 3, Devo the Cursed, D, D, A, B, D, B)(Yellow Temperance, 3, Rubber Soul, D, C, E, A, E, D)(Hanged Man, 3, J. Geil, C, A, A, B, D, D)(Emperor, 3, Hol Horse, B, B, B, C, E, E)(Empress, 3, Nena, C, E, A, A, D, D)(Wheel of Fortune, 3, ZZ, B, D, D, A, E, D)(Justice, 3, Enya the Hag, D, E, A, A, E, E)(Lovers, 3, Steely Dan, E, D, A, A, D, E)(Sun, 3, Arabia Fats, B, E, A, A, E, E)(Death Thirteen, 3, Mannish Boy, C, C, E, B, D, B)(Judgement, 3, Cameo, B, B, C, B, D, D)(High Priestess, 3, Midler, C, B, A, A, D, D)(Geb, 3, N'Doul, C, B, A, B, D, D)(Khnum, 3, Oingo, E, E, E, A, E, E)(Tohth, 3, Boingo, E, E, E, A, E, E)(Anubis, 3, Caravan Serai (Originally), B, B, E, A, E, C)(Bastet, 3, Mariah, E, E, B, A, E, E)(Sethan, 3, Alessi, D, D, E, C, D, D)(Osiris, 3, Daniel J. D'Arby, E, D, D, C, D, D)(Horus, 3, Pet Shop, B, B, D, C, E, C)(Atum, 3, Telence T. D'Arby, D, C, D, B, D, D)(Tenore Sax, 3, Kenny G., E, E, D, A, E, E)(Cream, 3, Vanilla Ice, B, B, D, C, C, D)(Holy's Stand, 3, Holy Kujo, N, N, N, N, N, N)(Jonathan's Stand, 3, Dio Brando, N, N, N, N, N, N)
+(Star Platinum, 3, Jotaro Kujo, A, A, C, A, A, A
+)(Magician's Red, 3, Muhammad Avdol, B, B, C, B, C, D
+)(Hermit Purple, 3, Joseph Joestar, D, C, D, A, D, E
+)(Hierophant Green, 3, Noriaki Kakyoin, C, B, A, B, C, D
+)(Silver Chariot, 3, Jean Pierre Polnareff, C, A, C, B, B, C
+)(The Fool, 3, Iggy, B, C, D, C, D, C
+)(The World, 3, DIO, A, A, C, A, B, B
+)(Tower of Gray, 3, Gray Fly, E, A, A, C, E, E
+)(Dark Blue Moon, 3, Impostor Captain Tennille, C, C, C, B, C, D
+)(Strength, 3, Forever, B, D, D, A, E, E
+)(Ebony Devil, 3, Devo the Cursed, D, D, A, B, D, B
+)(Yellow Temperance, 3, Rubber Soul, D, C, E, A, E, D
+)(Hanged Man, 3, J. Geil, C, A, A, B, D, D
+)(Emperor, 3, Hol Horse, B, B, B, C, E, E
+)(Empress, 3, Nena, C, E, A, A, D, D
+)(Wheel of Fortune, 3, ZZ, B, D, D, A, E, D
+)(Justice, 3, Enya the Hag, D, E, A, A, E, E
+)(Lovers, 3, Steely Dan, E, D, A, A, D, E
+)(Sun, 3, Arabia Fats, B, E, A, A, E, E
+)(Death Thirteen, 3, Mannish Boy, C, C, E, B, D, B
+)(Judgement, 3, Cameo, B, B, C, B, D, D
+)(High Priestess, 3, Midler, C, B, A, A, D, D
+)(Geb, 3, N'Doul, C, B, A, B, D, D
+)(Khnum, 3, Oingo, E, E, E, A, E, E
+)(Tohth, 3, Boingo, E, E, E, A, E, E
+)(Anubis, 3, Caravan Serai (Originally), B, B, E, A, E, C
+)(Bastet, 3, Mariah, E, E, B, A, E, E
+)(Sethan, 3, Alessi, D, D, E, C, D, D
+)(Osiris, 3, Daniel J. D'Arby, E, D, D, C, D, D
+)(Horus, 3, Pet Shop, B, B, D, C, E, C
+)(Atum, 3, Telence T. D'Arby, D, C, D, B, D, D
+)(Tenore Sax, 3, Kenny G., E, E, D, A, E, E
+)(Cream, 3, Vanilla Ice, B, B, D, C, C, D
+)(Holy's Stand, 3, Holy Kujo, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN
+)(Jonathan's Stand, 3, Dio Brando, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN
+)
