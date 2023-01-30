@@ -136,11 +136,15 @@ for i in range(1, len(el)):
         #verifica assim que achar o nome do artigo se é repetido
         isRepeated = verify_repeated(num_art[art].text, part)
         if not isRepeated:
+            print("NÃO REPETIDO\n")
             element = WebDriverWait(navegador, 5).until(EC.element_to_be_clickable(num_art[art]))
             element.click()
             get_info(navegador, STANDS_DB, part)
             navegador.back()
             nav_voltou = True
+        else:
+            print("REPETIDO\n")
+            nav_voltou = False
         print(STANDS_DB)
 
     # atualizar o menu e os itens por conta do DOM
