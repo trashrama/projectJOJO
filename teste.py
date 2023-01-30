@@ -102,7 +102,7 @@ for i in range(1, len(el)+1):
    
     #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
     bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
-    num_art = bloco[i].find_elements(By.CLASS_NAME, 'charwhitelink')
+    num_art = bloco[i-1].find_elements(By.CLASS_NAME, 'charwhitelink')
     
     element = WebDriverWait(navegador, 10).until(EC.element_to_be_clickable(num_art[1]))
     element.click()

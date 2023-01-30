@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-
+from time import sleep
 # pip3 install selenium
 
 # lista global com todos os stands
@@ -77,7 +77,7 @@ def get_info(navegador, STANDS_DB, part):
 def write_file(file_name):
     with open(file_name, 'w') as file:
         for stand in STANDS_DB:
-            file.write("({}, {}, {}, {}, {}, {}, {}, {}, {})\n".format(stand[0], stand[1], stand[2],
+            file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {})".format(stand[0], stand[1], stand[2],
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
     write_file("stands.txt")
 
@@ -87,34 +87,34 @@ navegador.maximize_window()
 print("TABELA DE DEBUG\n[1.0] Entrar na Página")
 navegador.get("https://jojowiki.com/List_of_Stands")
 
-
-#descobrir quantos elementos tem na pagina
+# ---- descobrir quantos elementos tem na pagina
 
 # procurar o menu
 menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
-# pegar somente os links dentro do menu
+# pegar somente os elementos dentro do menu
 el = menu.find_elements(By.TAG_NAME, 'li')
 
+sleep(10)
+
 bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
-num_art = bloco[0].find_elements(By.CLASS_NAME, 'charwhitelink')
+t = 0
+num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
 for i in range(1, len(el)):
    
     for art in range(len(num_art)):
         #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
+        sleep(10)
         bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
-        num_art = bloco[i-1].find_elements(By.CLASS_NAME, 'charwhitelink')
+
+        num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
         
-        element = WebDriverWait(navegador, 10).until(EC.element_to_be_clickable(num_art[0]))
+        element = WebDriverWait(navegador, 5).until(EC.element_to_be_clickable(num_art[art]))
         element.click()
 
         get_info(navegador, STANDS_DB, i+2)
         navegador.back()
         print(STANDS_DB)
-
-    bloco = navegador.find_element(By.CLASS_NAME, 'diamond2')
-    num_art = bloco.find_elements(By.CLASS_NAME, 'charwhitelink')
-
 
     # atualizar o menu e os itens por conta do DOM
     menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
@@ -123,5 +123,13 @@ for i in range(1, len(el)):
 
     aba_atual = navegador.find_element(By.XPATH, '(//li)[{}]'.format(i+1))
     aba_atual.click()
+
+    t = t + 1
+
+    sleep(10)
+    bloco = navegador.find_element(By.CLASS_NAME, 'diamond2')
+    num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
+
  
     WebDriverWait(navegador, 3)
+    write_file("stands.txt")
