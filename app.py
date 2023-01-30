@@ -18,13 +18,13 @@ def verify_repeated(stand_name, part):
                 return False
 def treatment_char(stat):
 
-    grab_initial_letter(stat)
-
+    stat = grab_initial_letter(stat)
+    
     if stat == '∞':
         return 'I'
     elif stat == 'N':
         return 'NULL'
-    elif stat =='<' or stat == '?':
+    elif stat == '<' or stat == '?':
         return 'UNKNOWN'
     else:
         return stat.upper()
@@ -156,5 +156,4 @@ for i in range(1, len(el)):
  #   bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
    # num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
-    write_file("stands.txt")
     WebDriverWait(navegador, 3)
