@@ -9,56 +9,44 @@ from time import sleep
 STANDS_DB = []
 
 
-def verify_repeated(part):
-    # try:
+def verify_repeated(stand_name, part):
+    if len(STANDS_DB) > 0:
+        for stand in STANDS_DB:
+            if stand[0] == stand_name and stand[1] != part and part < 7:
+                return True
+            else:
+                return False
 
-    #     WebDriverWait(navegador, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME, 'li')))
-    #     print("esperou")
-
-    #     tabbernav = navegador.find_element('xpath', '//*[@id="tabber-d7ebef15c1a2568511617c1c4b543b17"]/ul' )
-    #     aba_atual = tabbernav.find_elements(By.TAG_NAME, 'li')
-
-    #     for i in range(len(aba_atual)):
-    #         part_aba_atual = aba_atual[i].text
-    #         part_aba_atual = int(part_aba_atual[-1])
-
-    #         print(part_aba_atual)
-    #         if part_aba_atual == part:
-    #             aba_atual[i].click()
-    #             wait()
-    #             return True
-    # except:
-    #     return False
-    return False
 
 def treatment_char(stat):
 
     stat = grab_initial_letter(stat)
-    
+
     if stat == '∞':
         return 'I'
     elif stat == 'N':
         return 'NULL'
-    elif stat == '<' or stat == '?' or stat == 'U':
+    elif stat == '<' or stat == '?':
         return 'UNKNOWN'
     else:
         return stat.upper()
-#alguns status bugam e pegam alguns códigos HTML além deles próprios, então é necessária uma função para corrigir isso.
+# alguns status bugam e pegam alguns códigos HTML além deles próprios, então é necessária uma função para corrigir isso.
+
+
 def grab_initial_letter(stat):
     return stat[0]
+
+
 def get_info(navegador, STANDS_DB, part):
 
     try:
-
-         # verificar se tem stands repetidos como o Star Platinum na parte 3, 4 e 6
-        isRepeated = verify_repeated(part)
-
-
-
         # adiciona o nome do stand na lista
         stand_name = navegador.find_element(
             'xpath', '//h2[@class="pi-item pi-item-spacing pi-title"]').text
-       
+
+        # verificar se tem stands repetidos como o Star Platinum na parte 3, 4 e 6
+        isRepeated = verify_repeated(stand_name, part)
+
         # adiciona o nome do usuario
         div_stand_master = navegador.find_elements(
             'xpath', '//div[@data-source="user"]')[0].text
@@ -95,34 +83,33 @@ def get_info(navegador, STANDS_DB, part):
                 'xpath', "//td[@data-source='potential']").get_attribute("innerHTML")
         except:
             potential = "UNKNOWN"
-        
+
         destpower = treatment_char(destpower)
         speed = treatment_char(speed)
         range_stand = treatment_char(range_stand)
         potential = treatment_char(potential)
         precision = treatment_char(precision)
         destpower = treatment_char(destpower)
-        
+
         stand_info = [stand_name, part, stand_master, destpower, speed, range_stand,
-                        stamina, precision, potential]
-
-        if isRepeated:
-            for stand in STANDS_DB:
-                if (stand[3] == destpower and stand[4] == speed and stand[5] == range_stand and stand[6] == stamina and stand[7] == precision):
-                    return 0
-            navegador.back()
-
-        STANDS_DB.append(stand_info)
-
+                      stamina, precision, potential]
+        if stand_info not in STANDS_DB:
+            STANDS_DB.append(stand_info)
+        else:
+            pass
     except:
         pass
+
+
 def write_file(file_name):
     with open(file_name, 'w') as file:
         for stand in STANDS_DB:
             file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {})\n".format(stand[0], stand[1], stand[2],
-                                                                       stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
+                                                                            stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
+
+
 def wait():
-    sleep(10)
+    sleep(5)
 
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
@@ -146,29 +133,35 @@ num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
 for i in range(1, len(el)):
     part = i + 2
-    #for art in range(len(num_art)):
+    nav_voltou = False
     for art in range(len(num_art)):
-    
-        #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
-        
-        WebDriverWait(navegador, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
-        WebDriverWait(navegador, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'charwhitelink')))
+        # repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
+        # wait()
+        WebDriverWait(navegador, 10).until(
+            EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
 
+        if nav_voltou == True:
+            bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
+            num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
-
-        bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
-        num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
-
-        element = WebDriverWait(navegador, 10).until(EC.element_to_be_clickable(num_art[art]))
-
-        element.click()
-        get_info(navegador, STANDS_DB, part)
-        navegador.back()
-
+        # verifica assim que achar o nome do artigo se é repetido
+        isRepeated = verify_repeated(num_art[art].text, part)
+        if not isRepeated:
+            print("NÃO REPETIDO\n")
+            element = WebDriverWait(navegador, 5).until(
+                EC.element_to_be_clickable(num_art[art]))
+            element.click()
+            get_info(navegador, STANDS_DB, part)
+            navegador.back()
+            nav_voltou = True
+        else:
+            print("REPETIDO\n")
+            nav_voltou = False
+        print(STANDS_DB)
 
     # atualizar o menu e os itens por conta do DOM
     menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
-    
+
     aba_atual = navegador.find_element(By.XPATH, '(//li)[{}]'.format(i+1))
     aba_atual.click()
 
