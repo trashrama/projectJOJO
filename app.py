@@ -11,6 +11,9 @@ STANDS_DB = []
 
 def verify_repeated(stand_name, part):
     if len(STANDS_DB) > 0:
+        print("Nome {} Nome {}".format(stand[0], stand_name))
+        print("Parte {} Parte {}".format(stand[1], part))
+        print(part < 7)
         for stand in STANDS_DB:
             if stand[0] == stand_name and stand[1] != part and part < 7:
                 return True
@@ -96,7 +99,12 @@ def write_file(file_name):
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
 def wait():
     sleep(5)
-
+def split_stand_user(nome):
+    try:
+        nome = nome.split('/')
+        return nome[0]
+    except:
+        return nome
 
 navegador = webdriver.Chrome(executable_path=r'chromedriver')
 navegador.maximize_window()
@@ -125,8 +133,10 @@ for i in range(1, len(el)):
     part = i + 2
     for num_art in range(len(art)):
         #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
-
+        print(num_art)
+        print(len(art))
         if nav_voltou == True:
+            #aki dento esta o erro
             WebDriverWait(navegador, 190).until(
         EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
             bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
@@ -134,15 +144,17 @@ for i in range(1, len(el)):
 
         #verifica assim que achar o nome do artigo se é repetido
         isRepeated = verify_repeated(art[num_art].text, part)
-        nome_usuario = bloco[t].find_elements(By.CLASS_NAME, 'charstand')
 
         if not isRepeated:
             nome_usuario = bloco[t].find_elements(By.CLASS_NAME, 'charstand')
             nome_usuario = nome_usuario[num_art].text
             nome_stand = art[num_art].text
             element = WebDriverWait(navegador, 100).until(EC.element_to_be_clickable(art[num_art]))
-
             element.find_element(By.TAG_NAME, 'a').click()
+
+            #tentando dar split no nome pra stands com mais de um usuario
+            
+            nome_usuario = split_stand_user(nome_usuario)
             sem_pagina = get_info(navegador, STANDS_DB, nome_stand, nome_usuario, part)
             navegador.back()
             nav_voltou = True
@@ -157,6 +169,11 @@ for i in range(1, len(el)):
     aba_atual.click()
 
     t = t + 1
+
+    WebDriverWait(navegador, 190).until(
+EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
+    bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
+    art = bloco[t].find_elements(By.CLASS_NAME, 'charname')
 
 #    wait()
     WebDriverWait(navegador, 3)
