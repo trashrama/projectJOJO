@@ -20,11 +20,14 @@ def verify_repeated(stand_name, part):
 
 def treatment_char(stat):
 
-    stat = grab_initial_letter(stat)
+    lista_atrib = ['A', 'B', 'C', 'D', 'E', 'NULL']
+    if (stat.upper() in lista_atrib.upper()):
+        stat = grab_initial_letter(stat)
+        return stat.upper()
 
-    if stat == '∞':
-        return 'I'
-    elif stat == 'N':
+    elif stat == '∞':
+        return 'INFINITE'
+    elif stat == 'N' or stat == 'Ø':
         return 'NULL'
     elif stat == '<' or stat == '?':
         return 'UNKNOWN'
@@ -93,6 +96,7 @@ def get_info(navegador, STANDS_DB, part):
 
         stand_info = [stand_name, part, stand_master, destpower, speed, range_stand,
                       stamina, precision, potential]
+        print(stand_info)
         if stand_info not in STANDS_DB:
             STANDS_DB.append(stand_info)
         else:
