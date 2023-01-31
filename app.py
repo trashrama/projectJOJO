@@ -10,21 +10,26 @@ STANDS_DB = []
 
 
 def verify_repeated(part):
-    try:
-        tabbernav = navegador.find_element('xpath', '//*[@id="tabber-d7ebef15c1a2568511617c1c4b543b17"]/ul' )
-        aba_atual = tabbernav.find_elements(By.TAG_NAME, 'li')
+    # try:
 
-        for i in range(len(aba_atual)):
-            part_aba_atual = aba_atual[i].text
-            part_aba_atual = int(part_aba_atual[-1])
+    #     WebDriverWait(navegador, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME, 'li')))
+    #     print("esperou")
 
-            print(part_aba_atual)
-            if part_aba_atual == part:
-                aba_atual[i].click()
-                wait()
-                return True
-    except:
-        return False
+    #     tabbernav = navegador.find_element('xpath', '//*[@id="tabber-d7ebef15c1a2568511617c1c4b543b17"]/ul' )
+    #     aba_atual = tabbernav.find_elements(By.TAG_NAME, 'li')
+
+    #     for i in range(len(aba_atual)):
+    #         part_aba_atual = aba_atual[i].text
+    #         part_aba_atual = int(part_aba_atual[-1])
+
+    #         print(part_aba_atual)
+    #         if part_aba_atual == part:
+    #             aba_atual[i].click()
+    #             wait()
+    #             return True
+    # except:
+    #     return False
+    return False
 
 def treatment_char(stat):
 
@@ -44,13 +49,15 @@ def grab_initial_letter(stat):
 def get_info(navegador, STANDS_DB, part):
 
     try:
+
+         # verificar se tem stands repetidos como o Star Platinum na parte 3, 4 e 6
+        isRepeated = verify_repeated(part)
+
+
+
         # adiciona o nome do stand na lista
         stand_name = navegador.find_element(
             'xpath', '//h2[@class="pi-item pi-item-spacing pi-title"]').text
-
-        # verificar se tem stands repetidos como o Star Platinum na parte 3, 4 e 6
-        isRepeated = verify_repeated(part)
-
        
         # adiciona o nome do usuario
         div_stand_master = navegador.find_elements(
@@ -139,19 +146,25 @@ num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
 for i in range(1, len(el)):
     part = i + 2
+    #for art in range(len(num_art)):
     for art in range(len(num_art)):
+    
         #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
-        wait()
+        
+        WebDriverWait(navegador, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
+        WebDriverWait(navegador, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'charwhitelink')))
+
+
 
         bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
         num_art = bloco[t].find_elements(By.CLASS_NAME, 'charwhitelink')
 
-        element = WebDriverWait(navegador, 5).until(EC.element_to_be_clickable(num_art[art]))
+        element = WebDriverWait(navegador, 10).until(EC.element_to_be_clickable(num_art[art]))
+
         element.click()
         get_info(navegador, STANDS_DB, part)
         navegador.back()
 
-        print(STANDS_DB)
 
     # atualizar o menu e os itens por conta do DOM
     menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
