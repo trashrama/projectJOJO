@@ -11,15 +11,16 @@ STANDS_DB = []
 
 def verify_repeated(stand_name, part):
     if len(STANDS_DB) > 0:
-        print("Nome {} Nome {}".format(stand[0], stand_name))
-        print("Parte {} Parte {}".format(stand[1], part))
-        print(part < 7)
+       
+        isRepeated = False
         for stand in STANDS_DB:
+          #  print("Nome {} Nome {}".format(stand[0], stand_name))
+           # print("Parte {} Parte {}".format(stand[1], part))
+          #  print(part < 7)
             if stand[0] == stand_name and stand[1] != part and part < 7:
-                return True
-            else:
-                return False
-
+                isRepeated = True
+                break
+        return isRepeated
 
 def treatment_char(stat):
 
@@ -45,8 +46,8 @@ def get_info(navegador, STANDS_DB, stand_name, stand_master, part):
         # adiciona o nome do stand na lista
 
         try:
-            WebDriverWait(navegador, 100).until(EC.presence_of_element_located(
-            (By.XPATH, "//td[@data-source='destpower']")))
+            WebDriverWait(navegador, 100).until(EC.presence_of_all_elements_located(
+            (By.TAG_NAME, "td")))
             destpower = navegador.find_element(
                 'xpath', "//td[@data-source='destpower']").get_attribute("innerHTML")
         except:
@@ -93,12 +94,13 @@ def get_info(navegador, STANDS_DB, stand_name, stand_master, part):
     except:
         return True
 def write_file(file_name):
-    with open(file_name, 'w') as file:
+    with open(file_name, 'a') as file:
         for stand in STANDS_DB:
             file.writelines("({}, {}, {}, {}, {}, {}, {}, {}, {})\n".format(stand[0], stand[1], stand[2],
                                                                        stand[3], stand[4], stand[5], stand[6], stand[7], stand[8]))
+
 def wait():
-    sleep(5)
+    navegador.implicitly_wait(5) 
 def split_stand_user(nome):
     try:
         nome = nome.split('/')
@@ -121,7 +123,8 @@ menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
 # pegar somente os elementos dentro do menu
 el = menu.find_elements(By.TAG_NAME, 'li')
 
-wait()
+WebDriverWait(navegador, 190).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
 
 bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
 t = 0
@@ -129,12 +132,12 @@ art = bloco[t].find_elements(By.CLASS_NAME, 'charname')
 
 nav_voltou = False
 
-for i in range(1, len(el)):
+for i in range(1, len(el)-1):
     part = i + 2
     for num_art in range(len(art)):
         #repetir o bloco porque a estrutura do DOM atualiza quando volta a pagina
-        print(num_art)
-        print(len(art))
+        #print(num_art)
+        #print(len(art))
         if nav_voltou == True:
             #aki dento esta o erro
             WebDriverWait(navegador, 190).until(
@@ -153,10 +156,11 @@ for i in range(1, len(el)):
             element.find_element(By.TAG_NAME, 'a').click()
 
             #tentando dar split no nome pra stands com mais de um usuario
-            
+
             nome_usuario = split_stand_user(nome_usuario)
-            sem_pagina = get_info(navegador, STANDS_DB, nome_stand, nome_usuario, part)
+            get_info(navegador, STANDS_DB, nome_stand, nome_usuario, part)
             navegador.back()
+            wait()
             nav_voltou = True
         print(STANDS_DB)
 
@@ -175,5 +179,5 @@ EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
     bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
     art = bloco[t].find_elements(By.CLASS_NAME, 'charname')
 
-#    wait()
+    wait()
     WebDriverWait(navegador, 3)
