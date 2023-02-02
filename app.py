@@ -118,14 +118,18 @@ navegador.get("https://jojowiki.com/List_of_Stands")
 
 # procurar o menu
 WebDriverWait(navegador, 100).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, 'tabbernav')))
-menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
+            EC.presence_of_element_located((By.CLASS_NAME, 'tabber__tabs')))
+menu = navegador.find_element(By.CLASS_NAME, "tabber__tabs")
 # pegar somente os elementos dentro do menu
-el = menu.find_elements(By.TAG_NAME, 'li')
+el = menu.find_elements(By.TAG_NAME, 'a')
+
+print('oi')
+
 
 WebDriverWait(navegador, 190).until(
-        EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
+        EC.element_to_be_clickable((By.CLASS_NAME, 'charwhitelink')))
 
+#
 bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
 t = 0
 art = bloco[t].find_elements(By.CLASS_NAME, 'charname')
@@ -141,7 +145,7 @@ for i in range(1, len(el)-1):
         if nav_voltou == True:
             #aki dento esta o erro
             WebDriverWait(navegador, 190).until(
-        EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
+        EC.presence_of_element_located((By.CLASS_NAME, 'diamond2')))
             bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
             art = bloco[t].find_elements(By.CLASS_NAME, 'charname')
 
@@ -152,8 +156,7 @@ for i in range(1, len(el)-1):
             nome_usuario = bloco[t].find_elements(By.CLASS_NAME, 'charstand')
             nome_usuario = nome_usuario[num_art].text
             nome_stand = art[num_art].text
-            element = WebDriverWait(navegador, 100).until(EC.element_to_be_clickable(art[num_art]))
-            element.find_element(By.TAG_NAME, 'a').click()
+            art[num_art].find_element(By.TAG_NAME, 'a').click()
 
             #tentando dar split no nome pra stands com mais de um usuario
 
@@ -166,10 +169,11 @@ for i in range(1, len(el)-1):
 
     # atualizar o menu e os itens por conta do DOM
     WebDriverWait(navegador, 100).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, 'tabbernav')))
-    menu = navegador.find_element(By.CLASS_NAME, "tabbernav")
+            EC.presence_of_all_elements_located((By.CLASS_NAME, 'tabber__tabs')))
+    menu = navegador.find_element(By.CLASS_NAME, "tabber__tabs")
+    a = menu.find_elements(By.TAG_NAME, 'a')
     
-    aba_atual = navegador.find_element(By.XPATH, '(//li)[{}]'.format(i+1))
+    aba_atual = a[i]
     aba_atual.click()
 
     t = t + 1
@@ -178,6 +182,10 @@ for i in range(1, len(el)-1):
 EC.presence_of_all_elements_located((By.CLASS_NAME, 'diamond2')))
     bloco = navegador.find_elements(By.CLASS_NAME, 'diamond2')
     art = bloco[t].find_elements(By.CLASS_NAME, 'charname')
+    print(len(art))
 
     wait()
     WebDriverWait(navegador, 3)
+
+
+write_file('stands.txt')
